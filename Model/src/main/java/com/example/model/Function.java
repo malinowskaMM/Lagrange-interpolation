@@ -1,6 +1,7 @@
 package com.example.model;
 
 public class Function {
+    static HornerScheme hornerScheme = new HornerScheme();
 
     //y = 3x+1
     public static double linear(double x) {
@@ -14,7 +15,9 @@ public class Function {
 
     // y = 6x^5+2x^3+x^2-8
     public static double polynomial(double x) {
-        return (6 * Math.pow(x, 5)) + (2 * Math.pow(x, 3)) + Math.pow((x-1), 2) - 1;
+        //return (6 * Math.pow(x, 5)) + (2 * Math.pow(x, 3)) + Math.pow((x), 2) - 1;
+        double[] factors = {6, 0, 2, 1, 0, -1};
+        return hornerScheme.horner(factors,2, x );
     }
 
     // y = 3sin(x)+5tg(x)+cos(x)

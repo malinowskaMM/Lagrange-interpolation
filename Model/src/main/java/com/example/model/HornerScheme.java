@@ -2,7 +2,7 @@ package com.example.model;
 
 public class HornerScheme {
 
-    public int horner(int[] factors, int degree, int x) {
+    public double horner(double[] factors, int degree, double x) {
         if (degree == 0) {
             return factors[0];
         }
