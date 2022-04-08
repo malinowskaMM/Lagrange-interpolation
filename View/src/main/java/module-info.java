@@ -1,9 +1,9 @@
-module project.view {
+module com.example.view {
     requires javafx.controls;
     requires javafx.fxml;
-    opens project.view to javafx.fxml;
-    requires Model;
-    requires org.jfree.jfreechart;
+    opens com.example.view to javafx.fxml;
+    exports com.example.view;
+    requires com.example.model;
     requires java.desktop;
-    exports project.view;
+
 }
