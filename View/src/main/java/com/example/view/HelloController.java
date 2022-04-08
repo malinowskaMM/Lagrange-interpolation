@@ -50,8 +50,18 @@ public class HelloController {
         // trzeba tu jakos dostarczyc nasza funkcje, roboczo wpisana z palca nizej
         function = chooseFunctionByRadioButton();
         int resolution = 5000;
-        double firstPoint = Double.parseDouble(startIntervalInput.getText());
-        double lastPoint = Double.parseDouble(endIntervalInput.getText());
+        double firstPoint = 0;
+        double lastPoint = 0;
+        if (startIntervalInput.getText().matches("[0-9]+")) {
+            firstPoint = Double.parseDouble(startIntervalInput.getText());
+        } else {
+            openWarningDialog("Zły format podczas wprowadzania poczatku przedziału");
+        }
+        if (endIntervalInput.getText().matches("[0-9]+")) {
+            lastPoint = Double.parseDouble(endIntervalInput.getText());
+        } else {
+            openWarningDialog("Zły format podczas wprowadzania końca przedziału");
+        }
         double[] x = new double[resolution];
         double[] y = new double[resolution];
         double xIncrement = (lastPoint - firstPoint) / resolution;
@@ -94,6 +104,7 @@ public class HelloController {
         if (absolute.isSelected()) {
             return "absolute";
         } else {
+            openWarningDialog("Nie wybrano rodzaju funkcji");
             return "";
         }
     }
