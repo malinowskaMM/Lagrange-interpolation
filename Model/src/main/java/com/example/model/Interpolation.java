@@ -4,21 +4,19 @@ import java.util.Vector;
 
 public class Interpolation {
 
-    public void calculateInterpolation(double[] x, double[] y, int numberOfNodes, double firstPoint,
-                                           double lastPoint, Vector<Double> iX, Vector<Double> iY) {
-        for(double i = firstPoint; i < lastPoint; i += 0.01) {
-            double yVariable = 0;
-            for(int j = 0; j < numberOfNodes; j++) {
-                double tempY = y[j];
-                for(int k = 0; k < numberOfNodes; k++) {
-                    if( j != k ) {
-                        tempY *= (i-x[k])/(x[j]-x[k]);
-                    }
-                    yVariable += tempY;
+    public double calculateInterpolation(double[] x, double[] y, double xValue) {
+        double tempY;
+        double yValue = 0;
+
+        for (int j = 0; j < x.length; j++) {
+            tempY = 1.0;
+            for (int k = 0; k < x.length; k++) {
+                if (j != k) {
+                    tempY *= (xValue - x[k]) / (x[j] - x[k]);
                 }
-                iX.add(i);
-                iY.add(yVariable);
             }
+            yValue += tempY*y[j];
         }
+        return yValue;
     }
 }

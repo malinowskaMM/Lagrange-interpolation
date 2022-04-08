@@ -73,7 +73,7 @@ public class HelloController {
             orginalFunctionChecked(function, firstPoint, lastPoint, resolution, x, y);
         }
         if(interpolationFunction.isSelected()) {
-            interpolationChecked(numberOfNodes, firstPoint, lastPoint, x, y);
+            interpolationChecked(firstPoint, resolution, lastPoint, x, y);
         }
 
 
@@ -99,21 +99,17 @@ public class HelloController {
         lineChart.getData().add(graph.createSeries());
     }
 
-    private void interpolationChecked(int numberOfNodes, double firstPoint, double lastPoint,
+    private void interpolationChecked( double firstPoint, double lastPoint, double resolution,
                                        double[] x, double[] y) {
-        Vector<Double> iX = new Vector<>();
-        Vector<Double> iY = new Vector<>();
-        interpolation.calculateInterpolation(x, y, numberOfNodes, firstPoint, lastPoint, iX, iY);
-        double[] xI = new double[iX.size()];
-        double[] yI = new double[iY.size()];
-        for(int i = 0; i < iX.size(); i++) {
-            xI[i] = iX.elementAt(i);
+        Graph graph = new Graph(x, y);
+        double xIncrement = (lastPoint - firstPoint) / resolution;
+        double p = firstPoint;
+        for (int i = 0; i < resolution; i++) {
+            x[i] = p;
+            y[i] = interpolation.calculateInterpolation(x, y, p);
+            p += xIncrement;
         }
-        for(int i = 0; i < iY.size(); i++) {
-            yI[i] = iY.elementAt(i);
-        }
-        Graph graphInterpolation = new Graph(xI, yI);
-        lineChart.getData().add(graphInterpolation.createSeries());
+        lineChart.getData().add(graph.createSeries());
 
     }
 
