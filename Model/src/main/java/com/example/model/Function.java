@@ -17,7 +17,7 @@ public class Function {
     public static double polynomial(double x) {
         //return (6 * Math.pow(x, 5)) + (2 * Math.pow(x, 3)) + Math.pow((x), 2) - 1;
         double[] factors = {6, 0, 2, 1, 0, -1};
-        return hornerScheme.horner(factors,2, x );
+        return hornerScheme.horner(factors,factors.length, x );
     }
 
     // y = 3sin(x)+5tg(x)+cos(x)

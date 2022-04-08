@@ -3,10 +3,11 @@ package com.example.model;
 public class HornerScheme {
 
     public double horner(double[] factors, int degree, double x) {
-        if (degree == 0) {
-            return factors[0];
+        double hornerResult = factors[0];
+        for (int i = 1; i < degree; i++) {
+            hornerResult = hornerResult * x + factors[i];
         }
-        return x * horner(factors, degree - 1, x) + factors[degree];
+        return hornerResult;
     }
 
 }

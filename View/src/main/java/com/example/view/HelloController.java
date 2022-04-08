@@ -1,43 +1,40 @@
 package com.example.view;
 import com.example.model.Function;
+import com.example.model.Interpolation;
 import com.example.model.Nodes;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
 
+import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Vector;
+import java.util.stream.Stream;
 
 
 public class HelloController {
-    @FXML
-    private Label resultLabel;
-    @FXML
-    private LineChart<Double, Double> lineChart;
-    @FXML
-    private NumberAxis xAxis;
-    @FXML
-    private TextField startIntervalInput;
-    @FXML
-    private TextField endIntervalInput;
-    @FXML
-    private TextField numberOfNodesInput;
-    @FXML
-    private RadioButton mixed;
-    @FXML
-    private RadioButton absolute;
-    @FXML
-    private RadioButton linear;
-    @FXML
-    private RadioButton polynomial;
-    @FXML
-    private RadioButton trigonometric;
+    @FXML private Label resultLabel;
+    @FXML private LineChart<Double, Double> lineChart;
+    @FXML private NumberAxis xAxis;
+    @FXML private TextField startIntervalInput;
+    @FXML private TextField endIntervalInput;
+    @FXML private TextField numberOfNodesInput;
+    @FXML private RadioButton mixed;
+    @FXML private RadioButton absolute;
+    @FXML private RadioButton linear;
+    @FXML private RadioButton polynomial;
+    @FXML private RadioButton trigonometric;
+    @FXML private CheckBox originalFunction;
+    @FXML private CheckBox interpolationFunction;
 
     String function;
     Integer numberOfNodes;
     double[] nodes;
+    Interpolation interpolation = new Interpolation();
 
     @FXML
     private void initialize() {
@@ -48,27 +45,47 @@ public class HelloController {
     @FXML
     protected void onGraphButtonPressed() {
         // trzeba tu jakos dostarczyc nasza funkcje, roboczo wpisana z palca nizej
-        function = chooseFunctionByRadioButton();
-        int resolution = 5000;
         double firstPoint = 0;
         double lastPoint = 0;
-        if (startIntervalInput.getText().matches("[0-9]+")) {
+        if (startIntervalInput.getText().matches("^[+-]?(([1-9]\\d*)|0)(\\.\\d+)?")) {
             firstPoint = Double.parseDouble(startIntervalInput.getText());
         } else {
             openWarningDialog("Zły format podczas wprowadzania poczatku przedziału");
         }
-        if (endIntervalInput.getText().matches("[0-9]+")) {
+        if (endIntervalInput.getText().matches("^[+-]?(([1-9]\\d*)|0)(\\.\\d+)?")) {
             lastPoint = Double.parseDouble(endIntervalInput.getText());
         } else {
             openWarningDialog("Zły format podczas wprowadzania końca przedziału");
         }
+        if(firstPoint > lastPoint) {
+            double temp = firstPoint;
+            firstPoint = lastPoint;
+            lastPoint = temp;
+        }
+        function = chooseFunctionByRadioButton();
+        int resolution = 500;
         double[] x = new double[resolution];
         double[] y = new double[resolution];
+        lineChart.getData().clear();
+        xAxis.setLowerBound(firstPoint);
+        xAxis.setUpperBound(lastPoint);
+        if(originalFunction.isSelected()) {
+            orginalFunctionChecked(function, firstPoint, lastPoint, resolution, x, y);
+        }
+        if(interpolationFunction.isSelected()) {
+            interpolationChecked(numberOfNodes, firstPoint, lastPoint, x, y);
+        }
+
+
+    }
+
+    private void orginalFunctionChecked( String function, double firstPoint, double lastPoint,
+                                         double resolution, double[] x, double[] y) {
+        Graph graph = new Graph(x, y);
         double xIncrement = (lastPoint - firstPoint) / resolution;
         double p = firstPoint;
         for (int i = 0; i < resolution; i++) {
             x[i] = p;
-            // nasza funkcja f(x) ktora powinna przyjsc w funkcji
             switch (function) {
                 case "polynomial" -> y[i] = Function.polynomial(p);
                 case "trigonometric" -> y[i] = Function.trigonometric(p);
@@ -79,12 +96,24 @@ public class HelloController {
             }
             p += xIncrement;
         }
-        lineChart.getData().clear();
-        Graph graph = new Graph(x, y);
         lineChart.getData().add(graph.createSeries());
+    }
 
-        xAxis.setLowerBound(firstPoint);
-        xAxis.setUpperBound(lastPoint);
+    private void interpolationChecked(int numberOfNodes, double firstPoint, double lastPoint,
+                                       double[] x, double[] y) {
+        Vector<Double> iX = new Vector<>();
+        Vector<Double> iY = new Vector<>();
+        interpolation.calculateInterpolation(x, y, numberOfNodes, firstPoint, lastPoint, iX, iY);
+        double[] xI = new double[iX.size()];
+        double[] yI = new double[iY.size()];
+        for(int i = 0; i < iX.size(); i++) {
+            xI[i] = iX.elementAt(i);
+        }
+        for(int i = 0; i < iY.size(); i++) {
+            yI[i] = iY.elementAt(i);
+        }
+        Graph graphInterpolation = new Graph(xI, yI);
+        lineChart.getData().add(graphInterpolation.createSeries());
 
     }
 
@@ -126,7 +155,7 @@ public class HelloController {
         if(numberOfNodesInput.getText().matches("[0-9]+")) {
             numberOfNodes = Integer.valueOf(numberOfNodesInput.getText());
             File inputFile = new File("nodePosition.txt");
-            double[] nodes = Nodes.initNodeListFromTxtFile(inputFile, numberOfNodes);
+            nodes = Nodes.initNodeListFromTxtFile(inputFile, numberOfNodes);
             if(nodes == null) {
                 openWarningDialog("Nie udalo sie wczytac pozycji węzłów");
             } else {

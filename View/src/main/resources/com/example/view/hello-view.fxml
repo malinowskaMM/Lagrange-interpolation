@@ -98,8 +98,8 @@
                             <children>
                                 <Button mnemonicParsing="false" onAction="#loadNodesPositionsFromFile" prefHeight="46.0" prefWidth="179.0" text="Wczytaj położenie węzłów interpolacyjnych" textAlignment="CENTER" wrapText="true" />
                                 <Button mnemonicParsing="false" onAction="#onGraphButtonPressed" prefHeight="26.0" prefWidth="186.0" text="Wykres" textAlignment="CENTER" GridPane.rowIndex="5" />
-                                <CheckBox mnemonicParsing="false" text="oryginalna funkcja" GridPane.rowIndex="2" />
-                                <CheckBox mnemonicParsing="false" text="wielomian interpolacyjny" GridPane.rowIndex="3" />
+                                <CheckBox fx:id="originalFunction" mnemonicParsing="false" text="oryginalna funkcja" GridPane.rowIndex="2" />
+                                <CheckBox fx:id="interpolationFunction" mnemonicParsing="false" text="wielomian interpolacyjny" GridPane.rowIndex="3" />
                                 <CheckBox mnemonicParsing="false" text="węzły interpolacji" GridPane.rowIndex="4" />
                                 <Label text="Zaznacz składowe wykresu" GridPane.rowIndex="1" />
                             </children>
