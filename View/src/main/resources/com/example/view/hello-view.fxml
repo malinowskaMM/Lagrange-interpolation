@@ -39,10 +39,10 @@
                                 <toggleGroup>
                                     <ToggleGroup fx:id="method" />
                                 </toggleGroup> </RadioButton>
-                                <RadioButton fx:id="absolute" toggleGroup="$method" mnemonicParsing="false" prefHeight="18.0" prefWidth="136.0" text="funkcja |x|" GridPane.rowIndex="1" />
-                                <RadioButton fx:id="polynomial" toggleGroup="$method" mnemonicParsing="false" prefHeight="18.0" prefWidth="150.0" text="funkcja wielomianowa" GridPane.rowIndex="2" />
-                                <RadioButton fx:id="trigonometric" toggleGroup="$method" mnemonicParsing="false" prefHeight="18.0" prefWidth="162.0" text="funkcja trygonometryczna" GridPane.rowIndex="3" />
-                                <RadioButton fx:id="mixed" toggleGroup="$method" mnemonicParsing="false" text="złożenie funkcji" GridPane.rowIndex="4" />
+                                <RadioButton fx:id="absolute" mnemonicParsing="false" prefHeight="18.0" prefWidth="136.0" text="funkcja |x|" toggleGroup="$method" GridPane.rowIndex="1" />
+                                <RadioButton fx:id="polynomial" mnemonicParsing="false" prefHeight="18.0" prefWidth="150.0" text="funkcja wielomianowa" toggleGroup="$method" GridPane.rowIndex="2" />
+                                <RadioButton fx:id="trigonometric" mnemonicParsing="false" prefHeight="18.0" prefWidth="162.0" text="funkcja trygonometryczna" toggleGroup="$method" GridPane.rowIndex="3" />
+                                <RadioButton fx:id="mixed" mnemonicParsing="false" text="złożenie funkcji" toggleGroup="$method" GridPane.rowIndex="4" />
                             </children>
                         </GridPane>
                     </children>
@@ -78,7 +78,7 @@
                 </Label>
                 <AnchorPane prefHeight="46.0" prefWidth="166.0">
                     <children>
-                        <TextField layoutX="79.0" layoutY="1.0" prefHeight="26.0" prefWidth="84.0" />
+                        <TextField fx:id="numberOfNodesInput" layoutX="79.0" layoutY="1.0" prefHeight="26.0" prefWidth="84.0" />
                     </children>
                 </AnchorPane>
                 <AnchorPane prefHeight="223.0" prefWidth="204.0">
@@ -96,7 +96,7 @@
                                 <RowConstraints maxHeight="39.600012207031256" minHeight="10.0" prefHeight="36.400000000000006" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Button mnemonicParsing="false" prefHeight="46.0" prefWidth="179.0" text="Wczytaj położenie węzłów interpolacyjnych" textAlignment="CENTER" wrapText="true" />
+                                <Button mnemonicParsing="false" onAction="#loadNodesPositionsFromFile" prefHeight="46.0" prefWidth="179.0" text="Wczytaj położenie węzłów interpolacyjnych" textAlignment="CENTER" wrapText="true" />
                                 <Button mnemonicParsing="false" onAction="#onGraphButtonPressed" prefHeight="26.0" prefWidth="186.0" text="Wykres" textAlignment="CENTER" GridPane.rowIndex="5" />
                                 <CheckBox mnemonicParsing="false" text="oryginalna funkcja" GridPane.rowIndex="2" />
                                 <CheckBox mnemonicParsing="false" text="wielomian interpolacyjny" GridPane.rowIndex="3" />

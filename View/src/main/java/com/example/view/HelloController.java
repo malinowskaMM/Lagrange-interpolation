@@ -1,11 +1,14 @@
 package com.example.view;
 import com.example.model.Function;
+import com.example.model.Nodes;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 
 
 public class HelloController {
@@ -20,6 +23,8 @@ public class HelloController {
     @FXML
     private TextField endIntervalInput;
     @FXML
+    private TextField numberOfNodesInput;
+    @FXML
     private RadioButton mixed;
     @FXML
     private RadioButton absolute;
@@ -29,7 +34,10 @@ public class HelloController {
     private RadioButton polynomial;
     @FXML
     private RadioButton trigonometric;
+
     String function;
+    Integer numberOfNodes;
+    double[] nodes;
 
     @FXML
     private void initialize() {
@@ -41,7 +49,7 @@ public class HelloController {
     protected void onGraphButtonPressed() {
         // trzeba tu jakos dostarczyc nasza funkcje, roboczo wpisana z palca nizej
         function = chooseFunctionByRadioButton();
-        int resolution = 500;
+        int resolution = 5000;
         double firstPoint = Double.parseDouble(startIntervalInput.getText());
         double lastPoint = Double.parseDouble(endIntervalInput.getText());
         double[] x = new double[resolution];
@@ -88,7 +96,34 @@ public class HelloController {
         } else {
             return "";
         }
+    }
 
+    private void openWarningDialog(String text) {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Uwaga");
+        ButtonType type = new ButtonType("Ok", ButtonBar.ButtonData.OK_DONE);
+        dialog.setContentText(text);
+        dialog.getDialogPane().getButtonTypes().add(type);
+        dialog.showAndWait();
+    }
+
+    @FXML
+    protected void loadNodesPositionsFromFile() throws IOException {
+        if (numberOfNodesInput.getText().isEmpty()){
+            openWarningDialog("Przed wczytaniem pozycji węzłów, ustaw ich ilość");
+        }
+        if(numberOfNodesInput.getText().matches("[0-9]+")) {
+            numberOfNodes = Integer.valueOf(numberOfNodesInput.getText());
+            File inputFile = new File("nodePosition.txt");
+            double[] nodes = Nodes.initNodeListFromTxtFile(inputFile, numberOfNodes);
+            if(nodes == null) {
+                openWarningDialog("Nie udalo sie wczytac pozycji węzłów");
+            } else {
+                openWarningDialog("Położenia węzłów są następujące: " + Arrays.toString(nodes));
+            }
+        } else {
+            openWarningDialog("Nie własciwa zawartość pola");
+        }
     }
 
 }

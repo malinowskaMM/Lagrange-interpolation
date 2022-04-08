@@ -14,7 +14,7 @@ public class Function {
 
     // y = 6x^5+2x^3+x^2-8
     public static double polynomial(double x) {
-        return 6 * Math.pow(x, 5) + 2 * Math.pow(x, 3) + Math.pow(x, 2) - 8;
+        return (6 * Math.pow(x, 5)) + (2 * Math.pow(x, 3)) + Math.pow((x-1), 2) - 1;
     }
 
     // y = 3sin(x)+5tg(x)+cos(x)
