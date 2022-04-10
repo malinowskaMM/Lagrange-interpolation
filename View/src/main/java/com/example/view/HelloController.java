@@ -69,11 +69,13 @@ public class HelloController {
         lineChart.getData().clear();
         xAxis.setLowerBound(firstPoint);
         xAxis.setUpperBound(lastPoint);
+        double[] xPosNodes = nodes;
+        double [] yPosNodes = calculateValues(xPosNodes, function);
         if(originalFunction.isSelected()) {
             orginalFunctionChecked(function, firstPoint, lastPoint, resolution, x, y);
         }
         if(interpolationFunction.isSelected()) {
-            interpolationChecked(firstPoint, resolution, lastPoint, x, y);
+            interpolationChecked(firstPoint, resolution, lastPoint, xPosNodes, yPosNodes);
         }
 
 
@@ -104,7 +106,7 @@ public class HelloController {
         Graph graph = new Graph(x, y);
         double xIncrement = (lastPoint - firstPoint) / resolution;
         double p = firstPoint;
-        for (int i = 0; i < resolution; i++) {
+        for (int i = 0; i < x.length; i++) {
             x[i] = p;
             y[i] = interpolation.calculateInterpolation(x, y, p);
             p += xIncrement;
@@ -160,6 +162,34 @@ public class HelloController {
         } else {
             openWarningDialog("Nie własciwa zawartość pola");
         }
+    }
+
+
+    private double[] calculateValues(double[] xPos, String function){
+        double[] yPos = new double[xPos.length];
+        switch(function) {
+            case "polynomial":
+                for(int i = 0; i < xPos.length; i++) {
+                    yPos[i] = Function.polynomial(xPos[i]);
+                }
+            case "linear":
+                for(int i = 0; i < xPos.length; i++) {
+                    yPos[i] = Function.linear(xPos[i]);
+                }
+            case "absolute":
+                for(int i = 0; i < xPos.length; i++) {
+                    yPos[i] = Function.absolute(xPos[i]);
+                }
+            case "trigonometric":
+                for(int i = 0; i < xPos.length; i++) {
+                    yPos[i] = Function.trigonometric(xPos[i]);
+                }
+            case "mixed":
+                for(int i = 0; i < xPos.length; i++) {
+                    yPos[i] = Function.mixed(xPos[i]);
+                }
+        }
+        return yPos;
     }
 
 }
