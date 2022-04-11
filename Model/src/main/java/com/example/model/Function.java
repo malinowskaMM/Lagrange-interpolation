@@ -13,20 +13,20 @@ public class Function {
         return Math.abs(x);
     }
 
-    // y = 6x^5+2x^3+x^2-8
+    // y = x^5+x^4-2x^3-3 - najlepszy przedział (-2; 1,5)
     public static double polynomial(double x) {
         //return (6 * Math.pow(x, 5)) + (2 * Math.pow(x, 3)) + Math.pow((x), 2) - 1;
-        double[] factors = {6, 0, 2, 1, 0, -1};
+        double[] factors = {1,1,-2,0,0,-3};
         return hornerScheme.horner(factors,factors.length, x );
     }
 
-    // y = 3sin(x)+5tg(x)+cos(x)
+    // y = 3sin(x)+cos(2x+1) - najlepszy przedział (-3; 4)
     public static double trigonometric(double x) {
-        return 3 * Math.sin(x) + 5 + Math.tan(x) + Math.cos(x);
+        return 3 * Math.sin(x) + Math.cos(2*x+1);
     }
 
-    // y = 8x+|sin(2x)+1|+x^3*tg(|x|)
+    // y = 8|sin(x)|-2x^2-3x - najlepszy przedział (-3; 2)
     public static double mixed(double x) {
-        return 8 * x + Math.abs(Math.sin(2 * x) + 1) + Math.pow(x, 3) * Math.tan(Math.abs(x));
+        return 8 * Math.abs(Math.sin(x)) - 2 * Math.pow(x, 2) - 3 * x;
     }
 }

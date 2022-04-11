@@ -38,7 +38,7 @@ public class HelloController {
 
     @FXML
     private void initialize() {
-        lineChart.setAnimated(false);
+        lineChart.setAnimated(true);
 
     }
 
@@ -75,7 +75,7 @@ public class HelloController {
             orginalFunctionChecked(function, firstPoint, lastPoint, resolution, x, y);
         }
         if(interpolationFunction.isSelected()) {
-            interpolationChecked(firstPoint, resolution, lastPoint, xPosNodes, yPosNodes);
+            interpolationChecked(firstPoint, lastPoint, resolution, xPosNodes, yPosNodes, x, y);
         }
 
 
@@ -83,7 +83,6 @@ public class HelloController {
 
     private void orginalFunctionChecked( String function, double firstPoint, double lastPoint,
                                          double resolution, double[] x, double[] y) {
-        Graph graph = new Graph(x, y);
         double xIncrement = (lastPoint - firstPoint) / resolution;
         double p = firstPoint;
         for (int i = 0; i < resolution; i++) {
@@ -97,20 +96,23 @@ public class HelloController {
                 default -> y[i] = 0;
             }
             p += xIncrement;
+            System.out.println("Funkcja: [" + x[i] + ", " + y[i] + "]");
         }
+        Graph graph = new Graph(x, y);
         lineChart.getData().add(graph.createSeries());
     }
 
     private void interpolationChecked( double firstPoint, double lastPoint, double resolution,
-                                       double[] x, double[] y) {
-        Graph graph = new Graph(x, y);
+                                       double[] xPos, double[] yPos, double[] x, double[] y) {
         double xIncrement = (lastPoint - firstPoint) / resolution;
         double p = firstPoint;
-        for (int i = 0; i < x.length; i++) {
+        for (int i = 0; i < resolution; i++) {
             x[i] = p;
-            y[i] = interpolation.calculateInterpolation(x, y, p);
+            y[i] = interpolation.calculateInterpolation(xPos, yPos, p);
             p += xIncrement;
+            System.out.println("Interpolacja: [" + x[i] + ", " + y[i] + "]");
         }
+        Graph graph = new Graph(x, y);
         lineChart.getData().add(graph.createSeries());
 
     }
