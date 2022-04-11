@@ -15,9 +15,10 @@ public class Function {
 
     // y = x^5+x^4-2x^3-3 - najlepszy przedział (-2; 1,5)
     public static double polynomial(double x) {
-        //return (6 * Math.pow(x, 5)) + (2 * Math.pow(x, 3)) + Math.pow((x), 2) - 1;
         double[] factors = {1,1,-2,0,0,-3};
-        return hornerScheme.horner(factors,factors.length, x );
+              double result =  hornerScheme.horner(factors,factors.length, x );
+        System.out.printf("WYNIK: %f\n", result);
+        return result;
     }
 
     // y = 3sin(x)+cos(2x+1) - najlepszy przedział (-3; 4)

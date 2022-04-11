@@ -71,6 +71,8 @@ public class HelloController {
         xAxis.setUpperBound(lastPoint);
         double[] xPosNodes = nodes;
         double [] yPosNodes = calculateValues(xPosNodes, function);
+        System.out.println(Arrays.toString(xPosNodes));
+        System.out.println(Arrays.toString(yPosNodes));
         if(originalFunction.isSelected()) {
             orginalFunctionChecked(function, firstPoint, lastPoint, resolution, x, y);
         }
@@ -107,6 +109,7 @@ public class HelloController {
         double xIncrement = (lastPoint - firstPoint) / resolution;
         double p = firstPoint;
         for (int i = 0; i < resolution; i++) {
+
             x[i] = p;
             y[i] = interpolation.calculateInterpolation(xPos, yPos, p);
             p += xIncrement;
@@ -174,22 +177,27 @@ public class HelloController {
                 for(int i = 0; i < xPos.length; i++) {
                     yPos[i] = Function.polynomial(xPos[i]);
                 }
+                break;
             case "linear":
                 for(int i = 0; i < xPos.length; i++) {
                     yPos[i] = Function.linear(xPos[i]);
                 }
+                break;
             case "absolute":
                 for(int i = 0; i < xPos.length; i++) {
                     yPos[i] = Function.absolute(xPos[i]);
                 }
+                break;
             case "trigonometric":
                 for(int i = 0; i < xPos.length; i++) {
                     yPos[i] = Function.trigonometric(xPos[i]);
                 }
+                break;
             case "mixed":
                 for(int i = 0; i < xPos.length; i++) {
                     yPos[i] = Function.mixed(xPos[i]);
                 }
+                break;
         }
         return yPos;
     }

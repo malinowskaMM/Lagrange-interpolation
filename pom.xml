@@ -9,6 +9,11 @@
     <version>1.0-SNAPSHOT</version>
     <name>MNiO3</name>
 
+    <modules>
+        <module>View</module>
+        <module>Model</module>
+    </modules>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.8.1</junit.version>
