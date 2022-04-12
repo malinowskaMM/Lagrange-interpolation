@@ -14,9 +14,9 @@ public class Interpolation {
 
         for (int j = 0; j < x.length; j++) {
             tempY = 1.0;
-            for (int k = 1; k < x.length; k++) {
+            for (int k = 0; k < x.length; k++) {
                 if (j != k) {
-                    tempY *= (xValue - x[k]) / (x[j] - x[k]);
+                    tempY *= ((xValue - x[k]) / (x[j] - x[k]));
                 }
             }
             yValue += tempY*y[j];

@@ -20,7 +20,6 @@ public class Graph {
         for (int i = 0; i < numOfPoints; i++) {
             series.getData().add(new XYChart.Data<Double, Double>(x[i], y[i]));
         }
-
         return series;
     }
 }

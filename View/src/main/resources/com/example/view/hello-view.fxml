@@ -100,7 +100,7 @@
                                 <Button mnemonicParsing="false" onAction="#onGraphButtonPressed" prefHeight="26.0" prefWidth="186.0" text="Wykres" textAlignment="CENTER" GridPane.rowIndex="5" />
                                 <CheckBox fx:id="originalFunction" mnemonicParsing="false" text="oryginalna funkcja" GridPane.rowIndex="2" />
                                 <CheckBox fx:id="interpolationFunction" mnemonicParsing="false" text="wielomian interpolacyjny" GridPane.rowIndex="3" />
-                                <CheckBox mnemonicParsing="false" text="węzły interpolacji" GridPane.rowIndex="4" />
+                                <CheckBox fx:id="interpolationNodes" mnemonicParsing="false" text="węzły interpolacji" GridPane.rowIndex="4" />
                                 <Label text="Zaznacz składowe wykresu" GridPane.rowIndex="1" />
                             </children>
                         </GridPane>

@@ -3,17 +3,14 @@ import com.example.model.Function;
 import com.example.model.Interpolation;
 import com.example.model.Nodes;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-
-import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Vector;
-import java.util.stream.Stream;
 
 
 public class HelloController {
@@ -30,6 +27,7 @@ public class HelloController {
     @FXML private RadioButton trigonometric;
     @FXML private CheckBox originalFunction;
     @FXML private CheckBox interpolationFunction;
+    @FXML private CheckBox interpolationNodes;
 
     String function;
     Integer numberOfNodes;
@@ -39,7 +37,9 @@ public class HelloController {
     @FXML
     private void initialize() {
         lineChart.setAnimated(true);
-
+        originalFunction.setSelected(true);
+        interpolationFunction.setSelected(true);
+        interpolationNodes.setSelected(true);
     }
 
     @FXML
@@ -67,19 +67,22 @@ public class HelloController {
         double[] x = new double[resolution];
         double[] y = new double[resolution];
         lineChart.getData().clear();
+        lineChart.setCreateSymbols(true);
         xAxis.setLowerBound(firstPoint);
         xAxis.setUpperBound(lastPoint);
         double[] xPosNodes = nodes;
         double [] yPosNodes = calculateValues(xPosNodes, function);
-        System.out.println(Arrays.toString(xPosNodes));
-        System.out.println(Arrays.toString(yPosNodes));
+        if(interpolationNodes.isSelected()) {
+            interpolationNodesChecked(xPosNodes, yPosNodes);
+        }
         if(originalFunction.isSelected()) {
             orginalFunctionChecked(function, firstPoint, lastPoint, resolution, x, y);
         }
         if(interpolationFunction.isSelected()) {
             interpolationChecked(firstPoint, lastPoint, resolution, xPosNodes, yPosNodes, x, y);
         }
-
+        //lineChart.lookup(".default-color0.chart-series-line").setStyle("-fx-stroke: transparent");
+        //lineChart.lookup(".default-color0.chart-line-symbol").setStyle("-fx-background-color: green, white;");
 
     }
 
@@ -98,10 +101,10 @@ public class HelloController {
                 default -> y[i] = 0;
             }
             p += xIncrement;
-            System.out.println("Funkcja: [" + x[i] + ", " + y[i] + "]");
         }
         Graph graph = new Graph(x, y);
         lineChart.getData().add(graph.createSeries());
+        lineChart.getScene().getStylesheets().add(HelloController.class.getResource("chart.css").toExternalForm());
     }
 
     private void interpolationChecked( double firstPoint, double lastPoint, double resolution,
@@ -109,15 +112,20 @@ public class HelloController {
         double xIncrement = (lastPoint - firstPoint) / resolution;
         double p = firstPoint;
         for (int i = 0; i < resolution; i++) {
-
             x[i] = p;
             y[i] = interpolation.calculateInterpolation(xPos, yPos, p);
             p += xIncrement;
-            System.out.println("Interpolacja: [" + x[i] + ", " + y[i] + "]");
         }
         Graph graph = new Graph(x, y);
         lineChart.getData().add(graph.createSeries());
+        lineChart.getScene().getStylesheets().add(HelloController.class.getResource("chart.css").toExternalForm());
+    }
 
+    private void interpolationNodesChecked(double[] xPos, double[] yPos) {
+        Graph graph = new Graph(xPos, yPos);
+        XYChart.Series<Double, Double> series = graph.createSeries();
+        lineChart.getData().add(series);
+        lineChart.getScene().getStylesheets().add(HelloController.class.getResource("chart.css").toExternalForm());
     }
 
     private String chooseFunctionByRadioButton() {
