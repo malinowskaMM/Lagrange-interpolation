@@ -3,22 +3,31 @@ import com.example.model.Function;
 import com.example.model.Interpolation;
 import com.example.model.Nodes;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
 
 public class HelloController {
-    @FXML private Label resultLabel;
+    @FXML public NumberAxis yAxisLineChart;
+    @FXML private NumberAxis yAxisScatterChart;
+    @FXML private Pane pane;
     @FXML private LineChart<Double, Double> lineChart;
     @FXML private ScatterChart<Double, Double> scatterChart;
-    @FXML private NumberAxis xAxis;
+    @FXML private NumberAxis xAxisLineChart;
+    @FXML private NumberAxis xAxisScatterChart;
     @FXML private TextField startIntervalInput;
     @FXML private TextField endIntervalInput;
     @FXML private TextField numberOfNodesInput;
@@ -38,14 +47,14 @@ public class HelloController {
 
     @FXML
     private void initialize() {
-        lineChart.setAnimated(true);
+        lineChart.setAnimated(false);
         originalFunction.setSelected(true);
         interpolationFunction.setSelected(true);
         interpolationNodes.setSelected(true);
     }
 
     @FXML
-    protected void onGraphButtonPressed() {
+    protected void onGraphButtonPressed() throws IOException {
         // trzeba tu jakos dostarczyc nasza funkcje, roboczo wpisana z palca nizej
         double firstPoint = 0;
         double lastPoint = 0;
@@ -68,12 +77,22 @@ public class HelloController {
         int resolution = 500;
         double[] x = new double[resolution];
         double[] y = new double[resolution];
+
         lineChart.getData().clear();
-        lineChart.setCreateSymbols(true);
-        xAxis.setLowerBound(firstPoint);
-        xAxis.setUpperBound(lastPoint);
+        lineChart.setCreateSymbols(false);
+        lineChart.setOpacity(0.5);
+        scatterChart.getData().clear();
+        scatterChart.setOpacity(0.5);
+
+        xAxisLineChart.setLowerBound(firstPoint);
+        xAxisLineChart.setUpperBound(lastPoint);
+
+        xAxisScatterChart.setLowerBound(firstPoint);
+        xAxisScatterChart.setUpperBound(lastPoint);
+
         double[] xPosNodes = nodes;
         double [] yPosNodes = calculateValues(xPosNodes, function);
+
         if(interpolationNodes.isSelected()) {
             interpolationNodesChecked(xPosNodes, yPosNodes);
         }
@@ -83,6 +102,15 @@ public class HelloController {
         if(interpolationFunction.isSelected()) {
             interpolationChecked(firstPoint, lastPoint, resolution, xPosNodes, yPosNodes, x, y);
         }
+
+        pane.getChildren().add(scatterChart);
+        pane.getChildren().add(lineChart);
+
+        Stage stage = new Stage();
+        stage.setTitle("My New Stage Title");
+        stage.setScene(new Scene(pane, 450, 450));
+        stage.show();
+
 
     }
 
