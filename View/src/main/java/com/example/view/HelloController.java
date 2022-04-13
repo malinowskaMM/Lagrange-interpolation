@@ -8,6 +8,8 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -15,7 +17,7 @@ import java.util.Arrays;
 
 public class HelloController {
     @FXML private Label resultLabel;
-    @FXML private LineChart<Double, Double> lineChart;
+    //@FXML private LineChart<Double, Double> lineChart;
     @FXML private NumberAxis xAxis;
     @FXML private TextField startIntervalInput;
     @FXML private TextField endIntervalInput;
@@ -28,15 +30,19 @@ public class HelloController {
     @FXML private CheckBox originalFunction;
     @FXML private CheckBox interpolationFunction;
     @FXML private CheckBox interpolationNodes;
+    @FXML private Button graph;
+
 
     String function;
     Integer numberOfNodes;
     double[] nodes;
     Interpolation interpolation = new Interpolation();
+    XYChart.Series nodesSeries;
+    XYChart.Series originalSeries;
+    XYChart.Series interpolationSeries;
 
     @FXML
     private void initialize() {
-        lineChart.setAnimated(true);
         originalFunction.setSelected(true);
         interpolationFunction.setSelected(true);
         interpolationNodes.setSelected(true);
@@ -44,7 +50,6 @@ public class HelloController {
 
     @FXML
     protected void onGraphButtonPressed() {
-        // trzeba tu jakos dostarczyc nasza funkcje, roboczo wpisana z palca nizej
         double firstPoint = 0;
         double lastPoint = 0;
         if (startIntervalInput.getText().matches("^[+-]?(([1-9]\\d*)|0)(\\.\\d+)?")) {
@@ -66,27 +71,37 @@ public class HelloController {
         int resolution = 500;
         double[] x = new double[resolution];
         double[] y = new double[resolution];
-        lineChart.getData().clear();
-        lineChart.setCreateSymbols(true);
-        xAxis.setLowerBound(firstPoint);
-        xAxis.setUpperBound(lastPoint);
         double[] xPosNodes = nodes;
         double [] yPosNodes = calculateValues(xPosNodes, function);
+
         if(interpolationNodes.isSelected()) {
-            interpolationNodesChecked(xPosNodes, yPosNodes);
+            nodesSeries = interpolationNodesChecked(xPosNodes, yPosNodes);
         }
         if(originalFunction.isSelected()) {
-            orginalFunctionChecked(function, firstPoint, lastPoint, resolution, x, y);
+            originalSeries = originalFunctionChecked(function, firstPoint, lastPoint, resolution, x, y);
         }
         if(interpolationFunction.isSelected()) {
-            interpolationChecked(firstPoint, lastPoint, resolution, xPosNodes, yPosNodes, x, y);
+            interpolationSeries = interpolationChecked(firstPoint, lastPoint, resolution, xPosNodes, yPosNodes, x, y);
         }
+        LineChart<Number, Number> lineChart = new LineChart<>(new NumberAxis(), new NumberAxis());
+
+        lineChart.setAnimated(false);
+        lineChart.setCreateSymbols(true);
+        lineChart.getData().addAll(nodesSeries, originalSeries, interpolationSeries);
+
+        Scene scene = new Scene(lineChart, 500, 400);
+        scene.getStylesheets().add(getClass().getResource("chart.css").toExternalForm());
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
     }
 
-    private void orginalFunctionChecked( String function, double firstPoint, double lastPoint,
+    private XYChart.Series originalFunctionChecked(String function, double firstPoint, double lastPoint,
                                          double resolution, double[] x, double[] y) {
         double xIncrement = (lastPoint - firstPoint) / resolution;
         double p = firstPoint;
+        XYChart.Series seriesOriginal =  new XYChart.Series();
+        seriesOriginal.setName("Original function");
         for (int i = 0; i < resolution; i++) {
             x[i] = p;
             switch (function) {
@@ -97,31 +112,44 @@ public class HelloController {
                 case "absolute" -> y[i] = Function.absolute(p);
                 default -> y[i] = 0;
             }
+            seriesOriginal.getData().add(new XYChart.Data(p, y[i]));
             p += xIncrement;
         }
-        Graph graph = new Graph(x, y);
-        lineChart.getData().add(graph.createSeries());
+        return seriesOriginal;
+
+//        Graph graph = new Graph(x, y);
+//        lineChart.getData().add(graph.createSeries());
         //lineChart.getScene().getStylesheets().add(HelloController.class.getResource("chart.css").toExternalForm());
     }
 
-    private void interpolationChecked( double firstPoint, double lastPoint, double resolution,
+    private XYChart.Series interpolationChecked( double firstPoint, double lastPoint, double resolution,
                                        double[] xPos, double[] yPos, double[] x, double[] y) {
         double xIncrement = (lastPoint - firstPoint) / resolution;
         double p = firstPoint;
+        XYChart.Series seriesInterpolation =  new XYChart.Series();
+        seriesInterpolation.setName("Interpolation function");
         for (int i = 0; i < resolution; i++) {
             x[i] = p;
             y[i] = interpolation.calculateInterpolation(xPos, yPos, p);
+            seriesInterpolation.getData().add(new XYChart.Data(p, y[i]));
             p += xIncrement;
         }
-        Graph graph = new Graph(x, y);
-        lineChart.getData().add(graph.createSeries());
+        return seriesInterpolation;
+//        Graph graph = new Graph(x, y);
+//        lineChart.getData().add(graph.createSeries());
         //lineChart.getScene().getStylesheets().add(HelloController.class.getResource("chart.css").toExternalForm());
     }
 
-    private void interpolationNodesChecked(double[] xPos, double[] yPos) {
-        Graph graph = new Graph(xPos, yPos);
-        XYChart.Series<Double, Double> series = graph.createSeries();
-        lineChart.getData().add(series);
+    private XYChart.Series interpolationNodesChecked(double[] xPos, double[] yPos) {
+        XYChart.Series seriesNodes =  new XYChart.Series();
+        seriesNodes.setName("Nodes");
+        for( int i = 0; i < xPos.length; i++) {
+            seriesNodes.getData().add(new XYChart.Data(xPos[i], yPos[i]));
+        }
+        return seriesNodes;
+//        Graph graph = new Graph(xPos, yPos);
+//        XYChart.Series<Double, Double> series = graph.createSeries();
+//        lineChart.getData().add(series);
         //lineChart.getScene().getStylesheets().add(HelloController.class.getResource("chart.css").toExternalForm());
     }
 

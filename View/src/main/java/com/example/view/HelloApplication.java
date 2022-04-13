@@ -13,7 +13,7 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        scene = new Scene(fxmlLoader.load(), 800, 650);
+        scene = new Scene(fxmlLoader.load(), 658, 266);
         scene.getStylesheets().add(HelloApplication.class.getResource("chart.css").toExternalForm());
         stage.setTitle(
                 "MNiO - Zadanie 3 //Semestr 4, grupa 2, M.Banasiak (236494), M.Malinowska (236596) ");
