@@ -13,12 +13,10 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import javafx.scene.web.WebView;
 
 
 public class HelloController {
-    @FXML private Label resultLabel;
-    //@FXML private LineChart<Double, Double> lineChart;
-    @FXML private NumberAxis xAxis;
     @FXML private TextField startIntervalInput;
     @FXML private TextField endIntervalInput;
     @FXML private TextField numberOfNodesInput;
@@ -30,7 +28,12 @@ public class HelloController {
     @FXML private CheckBox originalFunction;
     @FXML private CheckBox interpolationFunction;
     @FXML private CheckBox interpolationNodes;
-    @FXML private Button graph;
+    @FXML private WebView linearView;
+    @FXML private WebView absoluteView;
+    @FXML private WebView polynomialView;
+    @FXML private WebView trigonometricView;
+    @FXML private WebView mixedView;
+
 
 
     String function;
@@ -46,6 +49,11 @@ public class HelloController {
         originalFunction.setSelected(true);
         interpolationFunction.setSelected(true);
         interpolationNodes.setSelected(true);
+        linearView.getEngine().loadContent("<math display=\\\"block\\\"><mi>y</mi><mo>=</mo><mi>3x+1</mi></math>");
+        absoluteView.getEngine().loadContent("<math display=\\\"block\\\"><mi>y</mi><mo>=</mo><mi>|x|</mi></math>");
+        polynomialView.getEngine().loadContent("<math display=\\\"block\\\"><mi>y</mi><mo>=</mo><msup><mi>x</mi><mn>5</mn></msup><msup><mi>+x</mi><mn>4</mn></msup><msup><mi>-2x</mi><mn>3</mn></msup><mi>-3</mi></math>");
+        trigonometricView.getEngine().loadContent("<math display=\\\"block\\\"><mi>y</mi><mo>=</mo><mi>3sin(x)+cos(2x+1)</mi></math>");
+        mixedView.getEngine().loadContent("<math display=\\\"block\\\"><mi>y</mi><mo>=</mo><mi>8|sin(x)|</mi><mi>-2</mi><msup><mi>x</mi><mn>2</mn></msup><mi>-3x</mi></math>");
     }
 
     @FXML
@@ -116,10 +124,6 @@ public class HelloController {
             p += xIncrement;
         }
         return seriesOriginal;
-
-//        Graph graph = new Graph(x, y);
-//        lineChart.getData().add(graph.createSeries());
-        //lineChart.getScene().getStylesheets().add(HelloController.class.getResource("chart.css").toExternalForm());
     }
 
     private XYChart.Series interpolationChecked( double firstPoint, double lastPoint, double resolution,
@@ -135,9 +139,6 @@ public class HelloController {
             p += xIncrement;
         }
         return seriesInterpolation;
-//        Graph graph = new Graph(x, y);
-//        lineChart.getData().add(graph.createSeries());
-        //lineChart.getScene().getStylesheets().add(HelloController.class.getResource("chart.css").toExternalForm());
     }
 
     private XYChart.Series interpolationNodesChecked(double[] xPos, double[] yPos) {
@@ -147,10 +148,6 @@ public class HelloController {
             seriesNodes.getData().add(new XYChart.Data(xPos[i], yPos[i]));
         }
         return seriesNodes;
-//        Graph graph = new Graph(xPos, yPos);
-//        XYChart.Series<Double, Double> series = graph.createSeries();
-//        lineChart.getData().add(series);
-        //lineChart.getScene().getStylesheets().add(HelloController.class.getResource("chart.css").toExternalForm());
     }
 
     private String chooseFunctionByRadioButton() {

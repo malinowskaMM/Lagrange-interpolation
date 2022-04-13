@@ -4,8 +4,6 @@ import java.util.Vector;
 
 public class Interpolation {
 
-
-
     // x - położenia węzłow interpolacyjnych
     // y - obliczone wartości dla położeń węzłów interpolacyjnych
     public double calculateInterpolation(double[] x, double[] y, double xValue) {

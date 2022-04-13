@@ -5,5 +5,6 @@ module com.example.view {
     exports com.example.view;
     requires com.example.model;
     requires java.desktop;
+    requires javafx.web;
 
 }
