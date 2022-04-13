@@ -81,9 +81,6 @@ public class HelloController {
         if(interpolationFunction.isSelected()) {
             interpolationChecked(firstPoint, lastPoint, resolution, xPosNodes, yPosNodes, x, y);
         }
-        //lineChart.lookup(".default-color0.chart-series-line").setStyle("-fx-stroke: transparent");
-        //lineChart.lookup(".default-color0.chart-line-symbol").setStyle("-fx-background-color: green, white;");
-
     }
 
     private void orginalFunctionChecked( String function, double firstPoint, double lastPoint,
@@ -104,7 +101,7 @@ public class HelloController {
         }
         Graph graph = new Graph(x, y);
         lineChart.getData().add(graph.createSeries());
-        lineChart.getScene().getStylesheets().add(HelloController.class.getResource("chart.css").toExternalForm());
+        //lineChart.getScene().getStylesheets().add(HelloController.class.getResource("chart.css").toExternalForm());
     }
 
     private void interpolationChecked( double firstPoint, double lastPoint, double resolution,
@@ -118,14 +115,14 @@ public class HelloController {
         }
         Graph graph = new Graph(x, y);
         lineChart.getData().add(graph.createSeries());
-        lineChart.getScene().getStylesheets().add(HelloController.class.getResource("chart.css").toExternalForm());
+        //lineChart.getScene().getStylesheets().add(HelloController.class.getResource("chart.css").toExternalForm());
     }
 
     private void interpolationNodesChecked(double[] xPos, double[] yPos) {
         Graph graph = new Graph(xPos, yPos);
         XYChart.Series<Double, Double> series = graph.createSeries();
         lineChart.getData().add(series);
-        lineChart.getScene().getStylesheets().add(HelloController.class.getResource("chart.css").toExternalForm());
+        //lineChart.getScene().getStylesheets().add(HelloController.class.getResource("chart.css").toExternalForm());
     }
 
     private String chooseFunctionByRadioButton() {
