@@ -4,11 +4,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="544.0" prefWidth="823.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="544.0" prefWidth="823.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.view.HelloController">
    <children>
       <AnchorPane prefHeight="544.0" prefWidth="823.0">
          <children>
-            <ScatterChart layoutX="287.0" prefHeight="550.0" prefWidth="535.0">
+            <ScatterChart fx:id="scatterChart" layoutX="287.0" prefHeight="550.0" prefWidth="535.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -16,7 +16,7 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </ScatterChart>
-            <LineChart layoutX="286.0" prefHeight="550.0" prefWidth="535.0">
+            <LineChart fx:id="lineChart" layoutX="286.0" prefHeight="550.0" prefWidth="535.0">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -37,11 +37,11 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <RadioButton mnemonicParsing="false" text="funkcja liniowa" />
-                  <RadioButton mnemonicParsing="false" text="funkcja wartości bezwględnej" GridPane.rowIndex="1" />
-                  <RadioButton mnemonicParsing="false" text="funkcja wielomianowa" GridPane.rowIndex="2" />
-                  <RadioButton mnemonicParsing="false" text="funkcja mieszana" GridPane.rowIndex="4" />
-                  <RadioButton mnemonicParsing="false" text="funkcja trygonometryczna" GridPane.rowIndex="3" />
+                  <RadioButton fx:id="linear" mnemonicParsing="false" text="funkcja liniowa" />
+                  <RadioButton fx:id="absolute" mnemonicParsing="false" text="funkcja wartości bezwględnej" GridPane.rowIndex="1" />
+                  <RadioButton fx:id="polynomial" mnemonicParsing="false" text="funkcja wielomianowa" GridPane.rowIndex="2" />
+                  <RadioButton fx:id="mixed" mnemonicParsing="false" text="funkcja mieszana" GridPane.rowIndex="4" />
+                  <RadioButton fx:id="trigonometric" mnemonicParsing="false" text="funkcja trygonometryczna" GridPane.rowIndex="3" />
                </children>
             </GridPane>
             <GridPane layoutX="27.0" layoutY="229.0" prefHeight="84.0" prefWidth="231.0">
@@ -57,13 +57,13 @@
                <children>
                   <Label text="Początek przedziału" />
                   <Label text="Koniec przedziału" GridPane.rowIndex="1" />
-                  <TextField prefHeight="26.0" prefWidth="92.0" GridPane.columnIndex="1" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="startIntervalInput" prefHeight="26.0" prefWidth="92.0" GridPane.columnIndex="1" />
+                  <TextField fx:id="endIntervalInput" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label text="Ilość węzłów" GridPane.rowIndex="2" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="numberOfNodesInput" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
-            <Button layoutX="27.0" layoutY="324.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="231.0" text="Wczytaj położenie węzłów z pliku " />
+            <Button layoutX="27.0" layoutY="324.0" mnemonicParsing="false" onAction="#loadNodesPositionsFromFile" prefHeight="26.0" prefWidth="231.0" text="Wczytaj położenie węzłów z pliku " />
             <GridPane layoutX="34.0" layoutY="371.0" prefHeight="135.0" prefWidth="225.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -75,10 +75,10 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <CheckBox mnemonicParsing="false" text="funkcja originalna" />
-                  <CheckBox mnemonicParsing="false" text="funkcja interpolacyjna" GridPane.rowIndex="1" />
-                  <CheckBox mnemonicParsing="false" text="węzły interpolacyjne" GridPane.rowIndex="2" />
-                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="226.0" text="Rysuj wykres" GridPane.rowIndex="3" />
+                  <CheckBox fx:id="originalFunction" mnemonicParsing="false" text="funkcja originalna" />
+                  <CheckBox fx:id="interpolationFunction" mnemonicParsing="false" text="funkcja interpolacyjna" GridPane.rowIndex="1" />
+                  <CheckBox fx:id="interpolationNodes" mnemonicParsing="false" text="węzły interpolacyjne" GridPane.rowIndex="2" />
+                  <Button mnemonicParsing="false" onAction="#onGraphButtonPressed" prefHeight="26.0" prefWidth="226.0" text="Rysuj wykres" GridPane.rowIndex="3" />
                </children>
             </GridPane>
          </children>

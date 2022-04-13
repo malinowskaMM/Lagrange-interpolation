@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import java.io.File;
@@ -16,6 +17,7 @@ import java.util.Arrays;
 public class HelloController {
     @FXML private Label resultLabel;
     @FXML private LineChart<Double, Double> lineChart;
+    @FXML private ScatterChart<Double, Double> scatterChart;
     @FXML private NumberAxis xAxis;
     @FXML private TextField startIntervalInput;
     @FXML private TextField endIntervalInput;
@@ -81,8 +83,6 @@ public class HelloController {
         if(interpolationFunction.isSelected()) {
             interpolationChecked(firstPoint, lastPoint, resolution, xPosNodes, yPosNodes, x, y);
         }
-        //lineChart.lookup(".default-color0.chart-series-line").setStyle("-fx-stroke: transparent");
-        //lineChart.lookup(".default-color0.chart-line-symbol").setStyle("-fx-background-color: green, white;");
 
     }
 
@@ -104,7 +104,6 @@ public class HelloController {
         }
         Graph graph = new Graph(x, y);
         lineChart.getData().add(graph.createSeries());
-        lineChart.getScene().getStylesheets().add(HelloController.class.getResource("chart.css").toExternalForm());
     }
 
     private void interpolationChecked( double firstPoint, double lastPoint, double resolution,
@@ -118,14 +117,12 @@ public class HelloController {
         }
         Graph graph = new Graph(x, y);
         lineChart.getData().add(graph.createSeries());
-        lineChart.getScene().getStylesheets().add(HelloController.class.getResource("chart.css").toExternalForm());
     }
 
     private void interpolationNodesChecked(double[] xPos, double[] yPos) {
         Graph graph = new Graph(xPos, yPos);
         XYChart.Series<Double, Double> series = graph.createSeries();
-        lineChart.getData().add(series);
-        lineChart.getScene().getStylesheets().add(HelloController.class.getResource("chart.css").toExternalForm());
+        scatterChart.getData().add(series);
     }
 
     private String chooseFunctionByRadioButton() {
